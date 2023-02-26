@@ -1,0 +1,6 @@
+name: opwatch
+version: 1.0
+main: team.plugincrafters.opwatch.OpWatchPlugin
+author: PluginCrafters
+website: https://github.com/PluginCrafters/OpWatch
+prefix: opwatch
