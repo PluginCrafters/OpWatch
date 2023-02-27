@@ -1,0 +1,13 @@
+# Puedes crear tu propio archivo de lenguaje. Debe llamarse 'lang-<lenguaje>.yml' Luego aquí escribes <lenguaje>.
+language: en
+
+#Aquí puedes elegir de que manera escribes los mensajes con formato de color hexadecimal. Ejemplo: "&#fff222Hola!" mostrará "Hola!" en color.
+hex-formatting:
+  start-tag: '&#'
+  end-tag: ''
+
+# ¿Banear al jugador que tenga op y no esté en la lista? (Se le quitará el op sin importar este valor)
+ban-player: true
+
+# ¿Kickear al jugador que tenga op y no esté en la lista? (Se le quitará el op sin importar este valor)
+kick-player: false
