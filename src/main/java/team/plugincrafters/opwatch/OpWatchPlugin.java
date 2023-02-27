@@ -46,6 +46,7 @@ public class OpWatchPlugin extends JavaPlugin {
         connection.connect();
         mainCommand.start();
         userManager.start();
+
     }
 
     @Override

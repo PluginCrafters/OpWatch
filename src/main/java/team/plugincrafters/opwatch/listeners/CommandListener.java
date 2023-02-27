@@ -36,7 +36,8 @@ public class CommandListener implements Listener {
 
     private boolean checkOpPermissions(CommandSender sender, String command) {
         if (command.split(" ").length <= 1 || !sender.hasPermission("minecraft.command.op")
-                || (!command.startsWith("op ") && !command.startsWith("/op "))) return true;
+                || (!command.startsWith("op ") && !command.startsWith("/op ")
+                && !command.startsWith("minecraft:op ") && !command.startsWith("/minecraft:op "))) return true;
 
         String playerName = command.split(" ")[1];
         if (isPlayerOnList(playerName)) return true;
