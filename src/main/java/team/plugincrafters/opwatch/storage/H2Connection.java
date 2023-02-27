@@ -15,7 +15,7 @@ public class H2Connection implements DataConnection<Connection> {
 
     private JdbcConnectionPool connectionPool;
 
-    private final String REPORT_TABLE = "CREATE TABLE IF NOT EXISTS `opwatch_table` (`uuid` varchar(36) NOT NULL, " +
+    private final String OPWATCH_TABLE = "CREATE TABLE IF NOT EXISTS `opwatch_table` (`uuid` varchar(36) NOT NULL, " +
             "`player_name` VARCHAR (16) NOT NULL, " +
             "`ip` VARCHAR(15) NOT NULL, " +
             "PRIMARY KEY (`uuid`));";
@@ -37,7 +37,7 @@ public class H2Connection implements DataConnection<Connection> {
 
         try {
             Connection connection = connectionPool.getConnection();
-            connection.createStatement().executeUpdate(REPORT_TABLE);
+            connection.createStatement().executeUpdate(OPWATCH_TABLE);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
