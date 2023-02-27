@@ -11,6 +11,7 @@ import static org.bukkit.ChatColor.COLOR_CHAR;
 public class Utils {
 
     public static String format(FileConfiguration configFile, String message) {
+        if (message.isEmpty()) return "";
         String startTag = configFile.getString("hex-formatting.start-tag");
         String endTag = configFile.getString("hex-formatting.end-tag");
 

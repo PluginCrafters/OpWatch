@@ -2,7 +2,9 @@ package team.plugincrafters.opwatch;
 
 import me.yushust.inject.Injector;
 import org.bukkit.plugin.java.JavaPlugin;
-import team.plugincrafters.opwatch.listeners.CommonListener;
+import team.plugincrafters.opwatch.commands.MainCommand;
+import team.plugincrafters.opwatch.listeners.CommandListener;
+import team.plugincrafters.opwatch.listeners.PlayerListener;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.UserManager;
 import team.plugincrafters.opwatch.modules.CoreModule;
@@ -18,9 +20,13 @@ public class OpWatchPlugin extends JavaPlugin {
     @Inject
     private FileManager fileManager;
     @Inject
-    private CommonListener commonListener;
+    private PlayerListener playerListener;
+    @Inject
+    private CommandListener commandListener;
     @Inject
     private UserManager userManager;
+    @Inject
+    private MainCommand mainCommand;
 
     @Override
     public void onEnable() {
@@ -30,12 +36,16 @@ public class OpWatchPlugin extends JavaPlugin {
         } catch (Exception e){
             e.printStackTrace();
         }
+        start();
+    }
 
-        commonListener.start();
-        connection.connect();
-
-        userManager.start();
+    private void start(){
         fileManager.loadAllFileConfigurations();
+        playerListener.start();
+        commandListener.start();
+        connection.connect();
+        mainCommand.start();
+        userManager.start();
     }
 
     @Override

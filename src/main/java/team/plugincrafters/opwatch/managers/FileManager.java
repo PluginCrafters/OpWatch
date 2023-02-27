@@ -29,11 +29,11 @@ public class FileManager {
         FileConfiguration langFileConfiguration = loadFileConfiguration(lang);
 
         if (langFileConfiguration == null) {
-            Bukkit.getLogger().info(Utils.format(get("config"),"&c[OpWatch] Language file not found. Using 'language-en.yml'"));
+            Bukkit.getLogger().info(Utils.format(get("config"),"&c[OpWatch] Language file not found. Using 'lang-en.yml'"));
             langFileConfiguration = loadFileConfiguration(String.format(LANG_FORMAT, "en"));
 
             if (langFileConfiguration == null) {
-                Bukkit.getLogger().severe(Utils.format(get("config"),"&c[OpWatch] language-en.yml file not found. Disabling..."));
+                Bukkit.getLogger().severe(Utils.format(get("config"),"&c[OpWatch] lang-en.yml file not found. Disabling..."));
                 Bukkit.getPluginManager().disablePlugin(plugin);
                 return;
             }

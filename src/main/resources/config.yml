@@ -1,5 +1,5 @@
 # Puedes crear tu propio archivo de lenguaje. Debe llamarse 'lang-<lenguaje>.yml' Luego aquí escribes <lenguaje>.
-language: en
+language: es
 
 #Aquí puedes elegir de que manera escribes los mensajes con formato de color hexadecimal. Ejemplo: "&#fff222Hola!" mostrará "Hola!" en color.
 hex-formatting:
