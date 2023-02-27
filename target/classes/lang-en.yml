@@ -1,6 +1,0 @@
-prefix: '&a&l[&6&lOpWatch&a&l]'
-
-not-op: '&cSe detectaron irregularidades en tu cuenta. Contacta a un administrador.'
-player-banned: '&bEl jugador %player% fue baneado ya que tenía op y no estaba en la lista de ops permitidos.'
-player-kicked: '&bEl jugador %player% fue kickeado ya que tenía op y no estaba en la lista de ops permitidos.'
-no-permission-for-op: '&#fbc332El jugador %player% no está en la lista de permitidos para tener op. No se realizó el comando'
