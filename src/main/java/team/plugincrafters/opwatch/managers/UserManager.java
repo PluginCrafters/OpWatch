@@ -15,6 +15,8 @@ public class UserManager {
     private ObjectRepository<User, String> userRepository;
     @Inject
     private OpWatchPlugin plugin;
+    @Inject
+    private FileManager fileManager;
 
     public void saveUser(User user){
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> userRepository.save(user));
@@ -36,5 +38,20 @@ public class UserManager {
 
     public void start(){
         userRepository.start();
+
+        int interval = fileManager.get("config").getInt("op-check-interval") * 20;
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, this::checkOpPlayers, 0, interval);
+    }
+
+    private void checkOpPlayers(){
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (player.isOp()) {
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    if (!fileManager.get("opList").getStringList("op-list").contains(player.getName())){
+                        // bla bla
+                    }
+                });
+            }
+        });
     }
 }

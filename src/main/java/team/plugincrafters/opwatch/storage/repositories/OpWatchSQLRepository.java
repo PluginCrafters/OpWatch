@@ -12,7 +12,7 @@ public class OpWatchSQLRepository implements ObjectRepository<User, String>{
     }
 
     @Override
-    public List loadAll() {
+    public List<User> loadAll() {
         return null;
     }
 

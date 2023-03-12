@@ -11,3 +11,16 @@ ban-player: true
 
 # ¿Kickear al jugador que tenga op y no esté en la lista? (Se le quitará el op sin importar este valor)
 kick-player: false
+
+# Si tienes plugins que pueden dar op con un comando, debes agregar los comandos aquí en 2 formatos:
+# 1. 'El comando que usas :: el permiso'. Por ejemplo, '/op <player> :: minecraft.command.op'
+# 2. 'El nombre del plugin:el comando :: el permiso'. Por ejemplo, '/plugin:op <player> :: plugin.command.op'
+# Si no hay un permiso asignado para ese comando, puedes no poner ':: permiso'.
+# NO RECOMENDAMOS USAR PLUGINS QUE DEN OP SIN PERMISOS
+# Debes escribir <player> donde va el nombre del jugador.
+op-commands:
+  - '/op <player> :: minecraft.command.op'
+  - '/minecraft:op <player> :: minecraft.command.op'
+
+# ¿Cada cuanto tiempo se chequea si los jugadores tienen op (en segundos)? 0 para no chequear.
+op-check-interval: 300
