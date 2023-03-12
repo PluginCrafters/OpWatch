@@ -1,7 +1,12 @@
 package team.plugincrafters.opwatch.listeners;
 
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.event.EventBus;
+import net.luckperms.api.event.node.NodeAddEvent;
+import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
+import net.luckperms.api.node.types.PermissionNode;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -10,23 +15,31 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import team.plugincrafters.opwatch.OpWatchPlugin;
 import team.plugincrafters.opwatch.managers.FileManager;
+import team.plugincrafters.opwatch.managers.PunishmentManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 
 public class CommandListener implements Listener {
 
     @Inject
-    private JavaPlugin plugin;
+    private OpWatchPlugin plugin;
     @Inject
     private FileManager fileManager;
+    @Inject
+    private PunishmentManager punishmentManager;
 
     public void start(){
         Bukkit.getPluginManager().registerEvents(this, plugin);
+
+        LuckPerms luckPerms = plugin.getLuckperms();
+        if (luckPerms == null || !fileManager.get("config").getBoolean("check-luckperms")) return;
+
+        EventBus eventBus = luckPerms.getEventBus();
+        eventBus.subscribe(plugin, NodeAddEvent.class, this::onLuckpermsCommand);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -37,6 +50,27 @@ public class CommandListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onServerCommand(ServerCommandEvent event) {
         if (senderHasIrregularities(event.getSender(), event.getCommand())) event.setCancelled(true);
+    }
+
+
+    private void onLuckpermsCommand(NodeAddEvent event){
+        if (!event.isUser() || !(event.getNode() instanceof PermissionNode)) return;
+
+        PermissionNode node = (PermissionNode) event.getNode();
+        List<String> permissions = fileManager.get("config").getStringList("permissions-list");
+        if (!permissions.contains(node.getPermission())) return;
+
+        Player player = Bukkit.getPlayer(((User) event.getTarget()).getUniqueId());
+        if (player == null) return;
+        String playerName = player.getName();
+        if (playerName == null || isPlayerOnList(playerName)) return;
+
+        this.plugin.getServer().getScheduler().runTask(this.plugin, () -> {
+            Bukkit.getConsoleSender().sendMessage(Utils.format(fileManager.get("config"),
+                    fileManager.get("language").getString("no-permission-for-op-list").replace("%player%", playerName)));
+
+            punishmentManager.removePermissions(Bukkit.getPlayerExact(playerName));
+        });
     }
 
     private boolean senderHasIrregularities(CommandSender sender, String command) {
@@ -70,20 +104,6 @@ public class CommandListener implements Listener {
         }
         return false;
     }
-
-    /*private boolean senderHasIrregularities(CommandSender sender, String command) {
-        if (command.split(" ").length <= 1 || !sender.hasPermission("minecraft.command.op")
-                || (!command.startsWith("op ") && !command.startsWith("/op ")
-                && !command.startsWith("minecraft:op ") && !command.startsWith("/minecraft:op "))) return false;
-
-        String playerName = command.split(" ")[1];
-        if (isPlayerOnList(playerName)) return false;
-
-
-        sender.sendMessage(Utils.format(fileManager.get("config"),
-                fileManager.get("language").getString("no-permission-for-op").replace("%player%", playerName)));
-        return true;
-    }*/
 
     private boolean isPlayerOnList(String playerName){
         return fileManager.get("opList").getStringList("op-list").contains(playerName);

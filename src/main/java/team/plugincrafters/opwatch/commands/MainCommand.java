@@ -41,11 +41,6 @@ public class MainCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args[0].equals("op")){
-            Player player = Bukkit.getPlayerExact(args[1]);
-            player.setOp(!player.isOp());
-        }
-
         if (args.length == 0){
             helpSubcommand.execute(sender, args);
             return true;

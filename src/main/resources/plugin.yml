@@ -5,6 +5,8 @@ author: PluginCrafters
 website: https://github.com/PluginCrafters/OpWatch
 prefix: opwatch
 api-version: 1.13
+softdepend:
+  - LuckPerms
 
 commands:
   opwatch:

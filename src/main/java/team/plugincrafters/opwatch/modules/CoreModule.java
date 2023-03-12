@@ -9,6 +9,7 @@ import team.plugincrafters.opwatch.User;
 import team.plugincrafters.opwatch.listeners.CommandListener;
 import team.plugincrafters.opwatch.listeners.PlayerListener;
 import team.plugincrafters.opwatch.managers.FileManager;
+import team.plugincrafters.opwatch.managers.PunishmentManager;
 import team.plugincrafters.opwatch.managers.UserManager;
 import team.plugincrafters.opwatch.storage.DataConnection;
 import team.plugincrafters.opwatch.storage.H2Connection;
@@ -34,6 +35,7 @@ public class CoreModule implements Module {
         binder.bind(CommandListener.class).singleton();
         binder.bind(UserManager.class).singleton();
         binder.bind(FileManager.class).singleton();
+        binder.bind(PunishmentManager.class).singleton();
 
         binder.install(new CommandsModule());
 

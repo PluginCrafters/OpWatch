@@ -1,3 +1,5 @@
+# Para quitar el prefix, deja vacio! ('')
+prefix: '&a&l[&6&lOpWatch&a&l] '
 # Puedes crear tu propio archivo de lenguaje. Debe llamarse 'lang-<lenguaje>.yml' Luego aquí escribes <lenguaje>.
 language: es
 
@@ -25,3 +27,12 @@ op-commands:
 
 # ¿Cada cuanto tiempo se chequea si los jugadores tienen op (en segundos)? 0 para no chequear.
 op-check-interval: 300
+
+# Ademas de chequear si el jugador tiene op, tambien chequea si tiene alguno de los siguientes permisos, y lo castiga de la misma manera.
+permissions-list:
+  - '*'
+  - 'minecraft.command.op'
+
+# Usa los eventos de LuckPerms para detectar cuando se agrega un comando, y se cancela el evento si el permiso es uno de
+# los listados anteriormente, y ademas el jugador no está en la op-list.
+check-luckperms: true

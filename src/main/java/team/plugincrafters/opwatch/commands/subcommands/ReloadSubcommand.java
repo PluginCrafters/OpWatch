@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import team.plugincrafters.opwatch.managers.FileManager;
+import team.plugincrafters.opwatch.managers.PunishmentManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
@@ -14,6 +15,8 @@ public class ReloadSubcommand extends Subcommand{
     private JavaPlugin plugin;
     @Inject
     private FileManager fileManager;
+    @Inject
+    private PunishmentManager punishmentManager;
 
     protected ReloadSubcommand() {
         super("reload","opwatch.reload", 1);
@@ -24,6 +27,7 @@ public class ReloadSubcommand extends Subcommand{
         FileConfiguration languageConfig = fileManager.get("language");
         plugin.reloadConfig();
         fileManager.loadAllFileConfigurations();
+        punishmentManager.reload();
         sender.sendMessage(Utils.format(fileManager.get("config"), languageConfig.getString("reload-config")));
         return true;
     }
