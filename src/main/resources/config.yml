@@ -15,8 +15,9 @@ kick-player: false
 # Si tienes plugins que pueden dar op con un comando, debes agregar los comandos aquí en 2 formatos:
 # 1. 'El comando que usas :: el permiso'. Por ejemplo, '/op <player> :: minecraft.command.op'
 # 2. 'El nombre del plugin:el comando :: el permiso'. Por ejemplo, '/plugin:op <player> :: plugin.command.op'
-# Si no hay un permiso asignado para ese comando, puedes no poner ':: permiso'.
-# NO RECOMENDAMOS USAR PLUGINS QUE DEN OP SIN PERMISOS
+# Si no hay un permiso asignado para ese comando, puedes no poner ':: permiso'. Tambien puedes no poner el permiso si quieres evitar el chequeo
+# de los permisos en este plugin, y dejar que cada plugin chequee sus propios permisos
+# NO RECOMENDAMOS USAR PLUGINS QUE DEN OP SIN PERMISOS.
 # Debes escribir <player> donde va el nombre del jugador.
 op-commands:
   - '/op <player> :: minecraft.command.op'

@@ -1,7 +1,10 @@
 package team.plugincrafters.opwatch.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,6 +15,7 @@ import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandListener implements Listener {
@@ -45,16 +49,23 @@ public class CommandListener implements Listener {
                     .matches(opCommand.split(" :: ")[0].replace("<player>", "\\S+").replace("/", ""))) continue;
 
             String perm = "";
-            if (opCommand.split("::").length == 2) perm = opCommand.split("::")[1];
-            if (!sender.hasPermission(perm.replaceAll(" ", ""))) return false;
+            if (opCommand.split(" :: ").length == 2) perm = opCommand.split(" :: ")[1];
+            FileConfiguration langFile = fileManager.get("language");
+
+            if (!sender.hasPermission(perm.replaceAll(" ", ""))){
+                sender.sendMessage(Utils.format(fileManager.get("config"),
+                        langFile.getString("no-permission-for-op-permission")).replace("%perm%", perm));
+                return true;
+            }
 
             String[] splitCommand = command.split(" ");
             int playerPos = opCommand.indexOf("<player>");
             String playerName = splitCommand[opCommand.substring(0, playerPos).split(" ").length];
+
             if (isPlayerOnList(playerName)) return false;
 
             sender.sendMessage(Utils.format(fileManager.get("config"),
-                    fileManager.get("language").getString("no-permission-for-op").replace("%player%", playerName)));
+                    langFile.getString("no-permission-for-op-list").replace("%player%", playerName)));
             return true;
         }
         return false;

@@ -6,7 +6,8 @@ not-op: '&cSe detectaron irregularidades en tu cuenta. Contacta a un administrad
 player-banned: '&bEl jugador %player% fue baneado ya que tenía op y no estaba en la lista de ops permitidos.'
 player-kicked: '&bEl jugador %player% fue kickeado ya que tenía op y no estaba en la lista de ops permitidos.'
 player-deop: '&bAl jugador %player% se le quitó el op ya que no estaba en la lista de ops permitidos.'
-no-permission-for-op: '&#fbc332El jugador %player% no está en la lista de permitidos para tener op. No se realizó el comando'
+no-permission-for-op-list: '&#fbc332El jugador %player% no está en la lista de permitidos para tener op. No se realizó el comando'
+no-permission-for-op-permission: '&#fbc332No tienes el permiso %perm%. No se realizó el comando.'
 no-permission: '&cNo tienes permisos para realizar este comando!'
 
 ###HELP COMMAND###

