@@ -8,6 +8,7 @@ import team.plugincrafters.opwatch.storage.repositories.ObjectRepository;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.UUID;
 
 public class UserManager {
 
@@ -27,9 +28,9 @@ public class UserManager {
         });
     }
 
-    public void getUserByUUID(String uuid, Callback<User> callback){
+    public void getUserByUUID(UUID uuid, Callback<User> callback){
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            User user = userRepository.load(uuid);
+            User user = userRepository.load(String.valueOf(uuid));
             callback.call(user);
         });
     }

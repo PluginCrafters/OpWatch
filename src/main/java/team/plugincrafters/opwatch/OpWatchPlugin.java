@@ -2,6 +2,7 @@ package team.plugincrafters.opwatch;
 
 import me.yushust.inject.Injector;
 import net.luckperms.api.LuckPerms;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -60,6 +61,9 @@ public class OpWatchPlugin extends JavaPlugin {
         mainCommand.start();
         userManager.start();
         punishmentManager.start();
+
+        int pluginId = 17946;
+        Metrics metrics = new Metrics(this, pluginId);
     }
 
     @Override
