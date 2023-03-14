@@ -1,6 +1,6 @@
 package team.plugincrafters.opwatch.storage.repositories;
 
-import team.plugincrafters.opwatch.User;
+import team.plugincrafters.opwatch.users.User;
 
 import java.util.List;
 

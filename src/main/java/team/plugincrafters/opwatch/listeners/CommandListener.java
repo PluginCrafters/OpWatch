@@ -35,7 +35,7 @@ public class CommandListener implements Listener {
         Bukkit.getPluginManager().registerEvents(this, plugin);
 
         LuckPerms luckPerms = plugin.getLuckperms();
-        if (luckPerms == null || !fileManager.get("config").getBoolean("check-luckperms")) return;
+        if (luckPerms == null || !fileManager.get("config").getBoolean("punishment.check-luckperms")) return;
 
         EventBus eventBus = luckPerms.getEventBus();
         eventBus.subscribe(plugin, NodeAddEvent.class, this::onLuckpermsCommand);
@@ -56,7 +56,7 @@ public class CommandListener implements Listener {
         if (!event.isUser() || !(event.getNode() instanceof PermissionNode)) return;
 
         PermissionNode node = (PermissionNode) event.getNode();
-        List<String> permissions = fileManager.get("config").getStringList("permissions-list");
+        List<String> permissions = fileManager.get("config").getStringList("punishment.permissions-list");
         if (!permissions.contains(node.getPermission())) return;
 
         Player player = Bukkit.getPlayer(((User) event.getTarget()).getUniqueId());
@@ -73,7 +73,7 @@ public class CommandListener implements Listener {
     }
 
     private boolean senderHasIrregularities(CommandSender sender, String command) {
-        List<String> opCommands = fileManager.get("config").getStringList("op-commands");
+        List<String> opCommands = fileManager.get("config").getStringList("punishment.op-commands");
         if (opCommands == null) return false;
 
         for (String opCommand : opCommands) {

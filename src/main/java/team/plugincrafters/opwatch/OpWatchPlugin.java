@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import team.plugincrafters.opwatch.commands.MainCommand;
+import team.plugincrafters.opwatch.listeners.BlockEvents;
 import team.plugincrafters.opwatch.listeners.CommandListener;
 import team.plugincrafters.opwatch.listeners.PlayerListener;
 import team.plugincrafters.opwatch.managers.FileManager;
@@ -28,6 +29,8 @@ public class OpWatchPlugin extends JavaPlugin {
     private PlayerListener playerListener;
     @Inject
     private CommandListener commandListener;
+    @Inject
+    private BlockEvents blockEvents;
     @Inject
     private UserManager userManager;
     @Inject
@@ -53,6 +56,7 @@ public class OpWatchPlugin extends JavaPlugin {
         start();
     }
 
+    //TODO Add update checker.
     private void start(){
         fileManager.loadAllFileConfigurations();
         playerListener.start();
@@ -61,9 +65,10 @@ public class OpWatchPlugin extends JavaPlugin {
         mainCommand.start();
         userManager.start();
         punishmentManager.start();
+        blockEvents.start();
 
         int pluginId = 17946;
-        Metrics metrics = new Metrics(this, pluginId);
+        new Metrics(this, pluginId);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package team.plugincrafters.opwatch;
+package team.plugincrafters.opwatch.users;
 
 import java.util.UUID;
 
@@ -7,11 +7,13 @@ public class User {
     private final UUID uuid;
     private final String name;
     private String ip;
+    private UserState userState;
 
-    public User(UUID uuid, String name, String ip){
+    public User(UUID uuid, String name, String ip, UserState userState){
         this.uuid = uuid;
         this.name = name;
         this.ip = ip;
+        this.userState = userState;
     }
 
     public void changeIp(String newIp){
@@ -28,5 +30,14 @@ public class User {
 
     public String getIp(){
         return ip;
+    }
+
+    public UserState getUserState() {
+        if (userState == null) userState = UserState.WAITING_CONFIRMATION;
+        return userState;
+    }
+
+    public void setUserState(UserState userState) {
+        this.userState = userState;
     }
 }

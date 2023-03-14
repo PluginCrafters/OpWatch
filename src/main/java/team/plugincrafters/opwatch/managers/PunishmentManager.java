@@ -45,12 +45,12 @@ public class PunishmentManager {
         PlayerLoginEvent.Result result = PlayerLoginEvent.Result.ALLOWED;
 
         String banReason = Utils.format(config, langFile.getString("not-op"));
-        if (config.getBoolean("ban-player")){
+        if (config.getBoolean("punishment.ban-player")){
             player.kickPlayer(banReason);
             Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), banReason, null, null);
             message = Utils.format(config, langFile.getString("player-banned"));
             result = PlayerLoginEvent.Result.KICK_BANNED;
-        } else if (config.getBoolean("kick-player")){
+        } else if (config.getBoolean("punishment.kick-player")){
             message = Utils.format(config, langFile.getString("player-kicked"));
             player.kickPlayer(banReason);
             result = PlayerLoginEvent.Result.KICK_OTHER;
@@ -77,7 +77,7 @@ public class PunishmentManager {
 
     public boolean isPowerful(Player player){
         if (player.isOp()) return true;
-        List<String> permissions = fileManager.get("config").getStringList("permissions-list");
+        List<String> permissions = fileManager.get("config").getStringList("punishment.permissions-list");
 
         if (permissions.stream().anyMatch(player::hasPermission)) return true;
 
@@ -88,7 +88,7 @@ public class PunishmentManager {
     }
 
     public void removePermissions(Player player){
-        fileManager.get("config").getStringList("permissions-list").forEach(permission -> {
+        fileManager.get("config").getStringList("punishment.permissions-list").forEach(permission -> {
             PermissionAttachment attachment = player.addAttachment(plugin);
             attachment.unsetPermission(permission);
             LuckPerms luckPerms = plugin.getLuckperms();

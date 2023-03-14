@@ -12,7 +12,7 @@ public class Utils {
 
     public static String format(FileConfiguration configFile, String message) {
         if (message.isEmpty()) return "";
-        message = configFile.getString("prefix") + message;
+        message = message.replace("%prefix%", configFile.getString("prefix"));
         String startTag = configFile.getString("hex-formatting.start-tag");
         String endTag = configFile.getString("hex-formatting.end-tag");
 
