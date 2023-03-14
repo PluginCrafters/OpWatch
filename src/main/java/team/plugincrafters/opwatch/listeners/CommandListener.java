@@ -17,6 +17,7 @@ import org.bukkit.event.server.ServerCommandEvent;
 import team.plugincrafters.opwatch.OpWatchPlugin;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.PunishmentManager;
+import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
@@ -30,6 +31,8 @@ public class CommandListener implements Listener {
     private FileManager fileManager;
     @Inject
     private PunishmentManager punishmentManager;
+    @Inject
+    private TwoAuthFactorManager twoAuthFactorManager;
 
     public void start(){
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -43,7 +46,13 @@ public class CommandListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        if (senderHasIrregularities(event.getPlayer(), event.getMessage())) event.setCancelled(true);
+        Player player = event.getPlayer();
+        if (fileManager.get("config").getBoolean("auth.enabled") && !twoAuthFactorManager.playerIsAuthenticated(player)){
+            event.setCancelled(true);
+            return;
+        }
+
+        if (senderHasIrregularities(player, event.getMessage())) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

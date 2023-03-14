@@ -2,7 +2,7 @@ package team.plugincrafters.opwatch.commands.subcommands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import team.plugincrafters.opwatch.OpWatchPlugin;
 import team.plugincrafters.opwatch.listeners.BlockEvents;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.PunishmentManager;
@@ -13,7 +13,7 @@ import javax.inject.Inject;
 public class ReloadSubcommand extends Subcommand{
 
     @Inject
-    private JavaPlugin plugin;
+    private OpWatchPlugin plugin;
     @Inject
     private FileManager fileManager;
     @Inject
@@ -31,6 +31,8 @@ public class ReloadSubcommand extends Subcommand{
         plugin.reloadConfig();
         fileManager.loadAllFileConfigurations();
         punishmentManager.reload();
+
+        plugin.reloadAuth();
         blockEvents.reload();
         sender.sendMessage(Utils.format(fileManager.get("config"), languageConfig.getString("reload-config")));
         return true;

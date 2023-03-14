@@ -7,14 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
-import team.plugincrafters.opwatch.users.User;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.PunishmentManager;
-import team.plugincrafters.opwatch.managers.UserManager;
-import team.plugincrafters.opwatch.users.UserState;
+import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
@@ -53,6 +49,7 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         if (!punishmentManager.isPowerful(player)) return;
 
+        if (!fileManager.get("config").getBoolean("auth.enabled")) return;
         twoAuthFactorManager.joinPlayer(player);
     }
 

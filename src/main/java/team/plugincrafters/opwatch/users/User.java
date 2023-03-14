@@ -7,13 +7,19 @@ public class User {
     private final UUID uuid;
     private final String name;
     private String ip;
+    private final String secret;
     private UserState userState;
 
-    public User(UUID uuid, String name, String ip, UserState userState){
+    public User(UUID uuid, String name, String ip, UserState userState, String secret){
         this.uuid = uuid;
         this.name = name;
         this.ip = ip;
         this.userState = userState;
+        this.secret = secret;
+    }
+
+    public String getSecret() {
+        return secret;
     }
 
     public void changeIp(String newIp){

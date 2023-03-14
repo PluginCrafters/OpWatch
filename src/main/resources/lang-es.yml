@@ -4,15 +4,19 @@ not-op: '%prefix% &cSe detectaron irregularidades en tu cuenta. Contacta a un ad
 player-banned: '%prefix% &bEl jugador %player% fue baneado ya que tenía op o permisos de op y no estaba en la lista de ops permitidos.'
 player-kicked: '%prefix% &bEl jugador %player% fue kickeado ya que tenía op o permisos de op y no estaba en la lista de ops permitidos.'
 player-deop: '%prefix% &bAl jugador %player% se le quitó el op o los permisos de op ya que no estaba en la lista de ops permitidos.'
-no-permission-for-op-list: '%prefix% &#fbc332El jugador %player% no está en la lista de permitidos para tener op o permisos de op. No se realizó el comando'
-no-permission-for-op-permission: '%prefix% &#fbc332No tienes el permiso %perm%. No se realizó el comando.'
+no-permission-for-op-list: '%prefix% &cEl jugador %player% no está en la lista de permitidos para tener op o permisos de op. No se realizó el comando'
+no-permission-for-op-permission: '%prefix% &cNo tienes el permiso %perm%. No se realizó el comando.'
 no-permission: '%prefix% &cNo tienes permisos para realizar este comando!'
 
 ###Authentication###
-authentication-needed: '%prefix% &cDebes autenticarte con 2fa. Por favor, ingresa el codigo que aparece en la aplicación que uses'
+authentication-needed: '%prefix% &cDebes autenticarte con 2fa debido a que tu ip cambió. Por favor, ingresa el codigo que aparece en la aplicación que uses.'
+incorrect-code: '%prefix% &cEl código es incorrecto. Recuerda que es de 6 dígitos.'
+success: '%prefix% &aBienvenido! Ya se guardaron los cambios de tu IP'
 
 ###HELP COMMAND###
 help: |
   &d------ &a&l[&6&lOpWatch&a&l] &d------
   &bUsa &d/opwatch reload &bpara recargar el plugin.
+  &bRecuerda que puedes usar colores hex en los mensajes!
+  &bHecho por: %author%
   &d------ &a&l[&6&lAwesome-Points&a&l] &d------

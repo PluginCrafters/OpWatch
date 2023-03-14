@@ -2,7 +2,7 @@
 prefix: '&a&l[&6&lOpWatch&a&l] '
 
 # Puedes crear tu propio archivo de lenguaje. Debe llamarse 'lang-<lenguaje>.yml' Luego aquí escribes <lenguaje>.
-language: es
+language: en
 
 # Aquí puedes elegir de que manera escribes los mensajes con formato de color hexadecimal. Ejemplo: "&#fff222Hola!" mostrará "Hola!" en color.
 # Esta opción permite compatibilidad con plugins que usen como formato de color hexadecimal solamente el #. Ejemplo: "#fff222Hola!"
@@ -42,7 +42,8 @@ punishment:
 
 auth:
   # Utilizar verificación 2fa en caso de que la ip de un jugador op cambie
-  2fa: true
+  # ACTIVAR ÚNICAMENTE EN EL SERVIDOR DE LOGUEO.
+  enabled: false
 
   # Es el nombre que aparecerá en la aplicacion que utilices como 2fa.
   server-name: "MinecraftServer"

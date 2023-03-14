@@ -19,6 +19,7 @@ import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 
 public class BlockEvents implements Listener {
 
@@ -30,69 +31,95 @@ public class BlockEvents implements Listener {
     private TwoAuthFactorManager twoAuthFactorManager;
 
     private String validationMessage;
+    private boolean enabled;
+    private HashMap<String, Long> timeMap = new HashMap<>();
 
     public void start(){
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        enabled = fileManager.get("config").getBoolean("auth.enabled");
         reload();
     }
 
     public void reload(){
-        this.validationMessage = Utils.format(fileManager.get("config.yml"), fileManager.get("language").getString("authentication-needed"));
+        this.validationMessage = Utils.format(fileManager.get("config"), fileManager.get("language").getString("authentication-needed"));
+        enabled = fileManager.get("config").getBoolean("auth.enabled");
+    }
+
+    private void sendMessage(Player player){
+        long currentTime = System.currentTimeMillis();
+        if (timeMap.containsKey(player.getName())){
+            long lastTime = timeMap.get(player.getName());
+            if ((currentTime - lastTime)/1000.0 < 5) return;
+        }
+        player.sendRawMessage(validationMessage);
+        timeMap.put(player.getName(), System.currentTimeMillis());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         if (event.getTo() != null && (
-                event.getTo().getBlockX() != event.getFrom().getBlockX() ||
-                event.getTo().getBlockY() != event.getFrom().getBlockY() ||
-                event.getTo().getBlockZ() != event.getFrom().getBlockZ())) {
+                event.getTo().getX() != event.getFrom().getX() ||
+                event.getTo().getY() != event.getFrom().getY() ||
+                event.getTo().getZ() != event.getFrom().getZ())) {
 
             event.getPlayer().teleport(event.getFrom());
-            player.sendMessage(validationMessage);
+            sendMessage(player);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemDrop(PlayerDropItemEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemPickup(PlayerPickupItemEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
@@ -101,6 +128,8 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
+        if (!enabled) return;
+
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
@@ -111,6 +140,8 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (!enabled) return;
+
         if (!(event.getDamager() instanceof Player)) return;
 
         Player player = (Player) event.getDamager();
@@ -121,6 +152,8 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
+        if (!enabled) return;
+
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
@@ -128,30 +161,36 @@ public class BlockEvents implements Listener {
 
         event.setCancelled(true);
         player.closeInventory();
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSlotChange(PlayerItemHeldEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         player.getInventory().setHeldItemSlot(4);
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent event) {
+        if (!enabled) return;
+
         Player player = event.getPlayer();
         if (twoAuthFactorManager.playerIsAuthenticated(player)) return;
 
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemMove(InventoryMoveItemEvent event) {
+        if (!enabled) return;
+
         if (!twoAuthFactorManager.isQR(event.getItem())) return;
 
         event.setCancelled(true);
@@ -159,13 +198,15 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemFrameInteract(PlayerInteractEntityEvent event) {
+        if (!enabled) return;
+
         if (!(event.getRightClicked() instanceof ItemFrame)) return;
         Player player = event.getPlayer();
 
         if (!twoAuthFactorManager.isQR(player.getItemInHand())) return;
 
         event.setCancelled(true);
-        player.sendMessage(validationMessage);
+        sendMessage(player);
     }
 
 }

@@ -1,10 +1,16 @@
 package team.plugincrafters.opwatch.managers;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 import org.bukkit.Material;
+import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import team.plugincrafters.opwatch.OpWatchPlugin;
+import team.plugincrafters.opwatch.conversations.AuthPrompt;
 import team.plugincrafters.opwatch.users.User;
 import team.plugincrafters.opwatch.users.UserState;
+import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -12,6 +18,10 @@ public class TwoAuthFactorManager {
 
     @Inject
     private UserManager userManager;
+    @Inject
+    private OpWatchPlugin plugin;
+    @Inject
+    private FileManager fileManager;
 
     public void joinPlayer(Player player){
         User user = userManager.getUserByUUID(player.getUniqueId());
@@ -27,18 +37,48 @@ public class TwoAuthFactorManager {
         userManager.loadUser(user);
 
         String playerIp = player.getAddress().getAddress().getHostAddress();
-        if (user.getIp().equals(playerIp)) return;
+        if (user.getIp().equals(playerIp) || playerIsAuthenticated(player)) return;
 
         user.setUserState(UserState.WAITING_CONFIRMATION);
-        // Enviar mensaje de verificación por googleAuth. No permitirle jugar hasta que lo ingrese.
 
+        ConversationFactory cf = new ConversationFactory(plugin);
+        Conversation conversation = cf
+                .withFirstPrompt(new AuthPrompt(fileManager, this))
+                .withLocalEcho(false)
+                .buildConversation(player);
+        conversation.begin();
+    }
 
+    public boolean certificateCode(Player player, String code){
+        boolean isCodeValid = false;
+
+        try {
+            int verificationCode = Integer.parseInt(code);
+            String secret = userManager.getUserByUUID(player.getUniqueId()).getSecret();
+            isCodeValid = plugin.getgAuth().authorize(secret, verificationCode);
+            if (isCodeValid) saveNewUser(player);
+
+        } catch (NumberFormatException ignored) {
+
+        }
+
+        return isCodeValid;
+    }
+
+    private void saveNewUser(Player player){
+        User user = userManager.getUserByUUID(player.getUniqueId());
+        user.setUserState(UserState.LOGGED_IN);
+        user.changeIp(player.getAddress().getAddress().getHostAddress());
+
+        userManager.saveUser(user);
+        player.sendRawMessage(Utils.format(fileManager.get("config"), fileManager.get("language").getString("success")));
     }
 
     private User createUser(Player player){
-        String playerIp = player.getAddress().getAddress().getHostAddress();
-        // Enviar mensaje para que se una a GoogleAuth y no permitirle jugar hasta que lo haga
-        User user = new User(player.getUniqueId(), player.getName(), playerIp, UserState.LOGGED_IN);
+        //TODO Enviar mapa con QR para que se una a GoogleAuth
+        String secret = plugin.getgAuth().createCredentials().getKey();
+        player.sendMessage(secret);
+        User user = new User(player.getUniqueId(), player.getName(), "", UserState.WAITING_CONFIRMATION, secret);
         userManager.saveUser(user);
 
         return user;

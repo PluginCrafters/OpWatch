@@ -1,5 +1,6 @@
 package team.plugincrafters.opwatch;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 import me.yushust.inject.Injector;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
@@ -39,6 +40,7 @@ public class OpWatchPlugin extends JavaPlugin {
     private PunishmentManager punishmentManager;
 
     private LuckPerms luckPerms;
+    private GoogleAuthenticator gAuth;
 
     @Override
     public void onEnable() {
@@ -65,10 +67,16 @@ public class OpWatchPlugin extends JavaPlugin {
         mainCommand.start();
         userManager.start();
         punishmentManager.start();
-        blockEvents.start();
 
+        reloadAuth();
         int pluginId = 17946;
         new Metrics(this, pluginId);
+    }
+
+    public void reloadAuth(){
+        if (fileManager.get("config").getBoolean("auth.enabled")) blockEvents.start();
+
+        if (gAuth == null) gAuth = new GoogleAuthenticator();
     }
 
     @Override
@@ -78,5 +86,9 @@ public class OpWatchPlugin extends JavaPlugin {
 
     public LuckPerms getLuckperms(){
         return luckPerms;
+    }
+
+    public GoogleAuthenticator getgAuth() {
+        return gAuth;
     }
 }
