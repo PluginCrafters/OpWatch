@@ -33,7 +33,7 @@ public class AuthPrompt extends StringPrompt {
         Objects.requireNonNull(s);
 
         Player player = (Player) context.getForWhom();
-        if (!twoAuthFactorManager.certificateCode(player, s)){
+        if (!twoAuthFactorManager.certificateCode(player, s.replace(" ", ""))){
             firstTime = false;
             return this;
         }

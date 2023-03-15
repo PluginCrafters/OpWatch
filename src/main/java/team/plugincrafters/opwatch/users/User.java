@@ -23,7 +23,7 @@ public class User {
     }
 
     public void changeIp(String newIp){
-        this.ip = ip;
+        this.ip = newIp;
     }
 
     public UUID getUuid(){

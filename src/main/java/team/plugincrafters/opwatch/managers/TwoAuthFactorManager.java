@@ -1,7 +1,8 @@
 package team.plugincrafters.opwatch.managers;
 
-import com.warrenstrange.googleauth.GoogleAuthenticator;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Player;
@@ -37,7 +38,10 @@ public class TwoAuthFactorManager {
         userManager.loadUser(user);
 
         String playerIp = player.getAddress().getAddress().getHostAddress();
-        if (user.getIp().equals(playerIp) || playerIsAuthenticated(player)) return;
+        if (user.getIp().equals(playerIp) || playerIsAuthenticated(player)){
+            user.setUserState(UserState.LOGGED_IN);
+            return;
+        }
 
         user.setUserState(UserState.WAITING_CONFIRMATION);
 
@@ -71,7 +75,10 @@ public class TwoAuthFactorManager {
         user.changeIp(player.getAddress().getAddress().getHostAddress());
 
         userManager.saveUser(user);
-        player.sendRawMessage(Utils.format(fileManager.get("config"), fileManager.get("language").getString("success")));
+        FileConfiguration langFile = fileManager.get("language");
+        player.sendRawMessage(Utils.format(fileManager.get("config"),langFile.getString("success")));
+        String message = Utils.format(fileManager.get("config"), langFile.getString("success-log"));
+        Bukkit.getConsoleSender().sendMessage(message.replace("%player%", player.getName()));
     }
 
     private User createUser(Player player){

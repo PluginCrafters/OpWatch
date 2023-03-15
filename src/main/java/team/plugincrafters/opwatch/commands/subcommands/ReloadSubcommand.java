@@ -6,6 +6,7 @@ import team.plugincrafters.opwatch.OpWatchPlugin;
 import team.plugincrafters.opwatch.listeners.BlockEvents;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.PunishmentManager;
+import team.plugincrafters.opwatch.managers.UserManager;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
@@ -20,6 +21,8 @@ public class ReloadSubcommand extends Subcommand{
     private PunishmentManager punishmentManager;
     @Inject
     private BlockEvents blockEvents;
+    @Inject
+    private UserManager userManager;
 
     protected ReloadSubcommand() {
         super("reload","opwatch.reload", 1);

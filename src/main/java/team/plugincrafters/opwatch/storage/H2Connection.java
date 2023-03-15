@@ -18,6 +18,7 @@ public class H2Connection implements DataConnection<Connection> {
     private final String OPWATCH_TABLE = "CREATE TABLE IF NOT EXISTS `opwatch_table` (`uuid` varchar(36) NOT NULL, " +
             "`player_name` VARCHAR (16) NOT NULL, " +
             "`ip` VARCHAR(15) NOT NULL, " +
+            "`secret_code` VARCHAR(50) NOT NULL, " +
             "PRIMARY KEY (`uuid`));";
 
     @Override
@@ -45,6 +46,10 @@ public class H2Connection implements DataConnection<Connection> {
 
     @Override
     public void disconnect(){
+        File traceFile = new File(plugin.getDataFolder(), "h2-file.db.trace.db");
+        if (traceFile.exists()) {
+            traceFile.delete();
+        }
         connectionPool.dispose();
     }
 

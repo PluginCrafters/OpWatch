@@ -2,13 +2,12 @@ package team.plugincrafters.opwatch.managers;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import team.plugincrafters.opwatch.users.User;
 import team.plugincrafters.opwatch.storage.Callback;
 import team.plugincrafters.opwatch.storage.repositories.ObjectRepository;
+import team.plugincrafters.opwatch.users.User;
 
 import javax.inject.Inject;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,6 +17,8 @@ public class UserManager {
     private ObjectRepository<User, String> userRepository;
     @Inject
     private JavaPlugin plugin;
+    @Inject
+    private FileManager fileManager;
 
     private final Set<User> users = new HashSet<>();
 
@@ -27,13 +28,6 @@ public class UserManager {
 
     public void loadUser(User user){
         this.users.add(user);
-    }
-
-    public void getUserList(Callback<List<User>> callback){
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            List<User> usersList = userRepository.loadAll();
-            callback.call(usersList);
-        });
     }
 
     public User getUserByUUID(UUID uuid){
@@ -48,6 +42,6 @@ public class UserManager {
     }
 
     public void start(){
-        userRepository.start();
+        this.users.addAll(userRepository.loadAll());
     }
 }
