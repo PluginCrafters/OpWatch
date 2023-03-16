@@ -18,3 +18,5 @@ permissions:
     description: Reload config.
   opwatch.reassign:
     description: Reassign player QR.
+    opwatch.updatechecker:
+    description: Sends a notification when the plugin has an update

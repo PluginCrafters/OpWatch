@@ -1,6 +1,9 @@
 # To remove the prefix, leave it empty! ('')
 prefix: '&a&l[&6&lOpWatch&a&l] '
 
+# Automatically checks for a new version available
+update-checker: true
+
 # You can create your own language file. It must be named 'lang-<language>.yml' Then, you write <language> here.
 language: en
 

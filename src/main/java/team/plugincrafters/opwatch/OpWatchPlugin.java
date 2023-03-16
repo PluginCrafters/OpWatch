@@ -1,5 +1,8 @@
 package team.plugincrafters.opwatch;
 
+import com.jeff_media.updatechecker.UpdateCheckSource;
+import com.jeff_media.updatechecker.UpdateChecker;
+import com.jeff_media.updatechecker.UserAgentBuilder;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
@@ -58,7 +61,7 @@ public class OpWatchPlugin extends JavaPlugin {
         start();
     }
 
-    // TODO Add update checker.
+
     private void start(){
         fileManager.loadAllFileConfigurations();
         playerListener.start();
@@ -71,6 +74,21 @@ public class OpWatchPlugin extends JavaPlugin {
         reloadAuth();
         int pluginId = 17946;
         new Metrics(this, pluginId);
+        checkUpdates();
+    }
+
+    private void checkUpdates(){
+        if (!fileManager.get("config").getBoolean("update-checker")) return;
+        final String id = "93347";
+        new UpdateChecker(this, UpdateCheckSource.SPIGOT, id)
+                .setDownloadLink(id)
+                .setDonationLink("https://paypal.me/RosenM00?country.x=AR&locale.x=es_XC")
+                .setChangelogLink(id)
+                .setNotifyOpsOnJoin(true)
+                .setNotifyByPermissionOnJoin("opwatch.updatechecker")
+                .setUserAgent(new UserAgentBuilder().addPluginNameAndVersion())
+                .checkEveryXHours(3)
+                .checkNow();
     }
 
     public void reloadAuth(){
