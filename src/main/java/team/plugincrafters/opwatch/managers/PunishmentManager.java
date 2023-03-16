@@ -36,6 +36,7 @@ public class PunishmentManager {
         start();
     }
 
+    // TODO Own ban system.
     public PlayerLoginEvent.Result punishPlayer(Player player){
         FileConfiguration config = fileManager.get("config");
         player.setOp(false);

@@ -61,7 +61,7 @@ public class HikariConnection implements DataConnection<Connection> {
         dataSource = new HikariDataSource();
         dataSource.setPoolName("OpWatch - Connection pool");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource.setJdbcUrl("jdbc:mysql://" + ip + "/" + database + "?characterEncoding=utf8");
+        dataSource.setJdbcUrl("jdbc:mysql://" + ip + "/" + database + "?characterEncoding=utf8&allowPublicKeyRetrieval=true");
         dataSource.addDataSourceProperty("cachePrepStmts", "true");
         dataSource.addDataSourceProperty("prepStmtCacheSize", "250");
         dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -73,8 +73,7 @@ public class HikariConnection implements DataConnection<Connection> {
         dataSource.setPassword(password);
         dataSource.setMinimumIdle(10);
         dataSource.setMaximumPoolSize(10);
-        dataSource.setMaxLifetime(180000L);
-        dataSource.setIdleTimeout(99999999999L);
+        dataSource.setMaxLifetime(600000L);
         dataSource.setMinimumIdle(5);
         dataSource.setConnectionTimeout(9999999999L);
         dataSource.setMaximumPoolSize(15);

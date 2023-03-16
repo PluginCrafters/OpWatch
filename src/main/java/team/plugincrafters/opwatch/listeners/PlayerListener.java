@@ -14,6 +14,7 @@ import team.plugincrafters.opwatch.managers.PunishmentManager;
 import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
 import team.plugincrafters.opwatch.managers.UserManager;
 import team.plugincrafters.opwatch.users.User;
+import team.plugincrafters.opwatch.users.UserState;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
@@ -60,7 +61,10 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
-        if (twoAuthFactorManager.playerIsAuthenticated(event.getPlayer())) return;
+        if (twoAuthFactorManager.playerIsAuthenticated(event.getPlayer())){
+            userManager.getUserByUUID(event.getPlayer().getUniqueId()).setUserState(UserState.WAITING_CONFIRMATION);
+            return;
+        }
 
         Player player = event.getPlayer();
         User user = userManager.getUserByUUID(player.getUniqueId());

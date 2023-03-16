@@ -83,8 +83,10 @@ public class TwoAuthFactorManager {
         String message = Utils.format(fileManager.get("config"), langFile.getString("success-log"));
         Bukkit.getConsoleSender().sendMessage(message.replace("%player%", player.getName()));
 
-        player.getInventory().setHeldItemSlot(4);
-        player.setItemInHand(user.getItem());
+        if (user.getItem() != null){
+            player.getInventory().setHeldItemSlot(4);
+            player.setItemInHand(user.getItem());
+        }
         user.setItem(null);
     }
 
