@@ -1,59 +1,59 @@
-# Para quitar el prefix, dejalo vacio! ('')
+# To remove the prefix, leave it empty! ('')
 prefix: '&a&l[&6&lOpWatch&a&l] '
 
-# Puedes crear tu propio archivo de lenguaje. Debe llamarse 'lang-<lenguaje>.yml' Luego aquí escribes <lenguaje>.
+# You can create your own language file. It must be named 'lang-<language>.yml' Then, you write <language> here.
 language: en
 
-# Aquí puedes elegir de que manera escribes los mensajes con formato de color hexadecimal. Ejemplo: "&#fff222Hola!" mostrará "Hola!" en color.
-# Esta opción permite compatibilidad con plugins que usen como formato de color hexadecimal solamente el #. Ejemplo: "#fff222Hola!"
+# Here you can choose how you write messages in hexadecimal color format. Example: "&#fff222Hello!" will show "Hello!" in color.
+# This option allows compatibility with plugins that use only # as hexadecimal color format. Example: "#fff222Hello!"
 hex-formatting:
   start-tag: '&#'
   end-tag: ''
 
 punishment:
-  # ¿Banear al jugador que tenga op y no esté en la lista? (Se le quitará el op sin importar este valor)
+  # ban-player who has op and is not in the list? (Op will be removed regardless of this value).
   ban-player: true
 
-  # ¿Kickear al jugador que tenga op y no esté en la lista? (Se le quitará el op sin importar este valor)
+  # kick player who has op and is not in the list? (Op will be removed regardless of this value)
   kick-player: false
 
-  # Si tienes plugins que pueden dar op con un comando, debes agregar los comandos aquí en 2 formatos:
-  # 1. 'El comando que usas :: el permiso'. Por ejemplo, '/op <player> :: minecraft.command.op'
-  # 2. 'El nombre del plugin:el comando :: el permiso'. Por ejemplo, '/plugin:op <player> :: plugin.command.op'
-  # Si no hay un permiso asignado para ese comando, puedes no poner ':: permiso'. Tambien puedes no poner el permiso si quieres evitar el chequeo
-  # de los permisos en este plugin, y dejar que cada plugin chequee sus propios permisos
-  # NO RECOMENDAMOS USAR PLUGINS QUE DEN OP SIN PERMISOS.
-  # Debes escribir <player> donde va el nombre del jugador.
+  # If you have plugins that can give op with a command, you must add the commands here in 2 formats:
+  # 1. 'The command you use :: the permission'. For example, '/op <player> :: minecraft.command.op'.
+  # 2. 'The plugin name:command :: permission'. For example, '/plugin:op <player> :: plugin.command.op'
+  # If there is no permission assigned for that command, you can omit ':: permission'. You can also not set the permission if you want to avoid the check
+  # of permissions in this plugin, and let each plugin check its own permissions.
+  # WE DON'T RECOMMEND USING PLUGINS THAT GIVE OP WITHOUT PERMISSIONS.
+  # You must write <player> where the player name goes.
   op-commands:
     - '/op <player> :: minecraft.command.op'
     - '/minecraft:op <player> :: minecraft.command.op'
 
-  # ¿Cada cuanto tiempo se chequea si los jugadores tienen op (en segundos)? 0 para no chequear.
+  # How often to check if players have op (in seconds)? 0 to not check.
   op-check-interval: 300
 
-  # Ademas de chequear si el jugador tiene op, tambien chequea si tiene alguno de los siguientes permisos, y lo castiga de la misma manera.
+  # In addition to checking if the player has op, it also checks if they have any of the following permissions, and punishes them in the same way.
   permissions-list:
     - '*'
     - 'minecraft.command.op'
 
-  # Usa los eventos de LuckPerms para detectar cuando se agrega un comando, y se cancela el evento si el permiso es uno de
-  # los listados anteriormente, y ademas el jugador no está en la op-list.
+    # Uses LuckPerms events to detect when a permission is added, and cancels the event when the permission is one
+    # of the ones listed above and the player is not on the op-list.
   check-luckperms: true
 
 auth:
-  # Utilizar verificación 2fa en caso de que la ip de un jugador op cambie
-  # ACTIVAR ÚNICAMENTE EN EL SERVIDOR DE LOGUEO.
+  # Use 2FA check in case an op player's ip changes.
+  # ENABLE ONLY ON THE LOGIN SERVER.
   enabled: false
 
-  # Es el nombre que aparecerá en la aplicacion que utilices como 2fa.
+  # This is the name that will appear in the application you use as 2FA.
   server-name: "MinecraftServer"
 
-# Utilizado para almacenar la ip de los jugadores op en el auth.
+# Used to store the ip of the op players in the auth.
 storage:
-  # Los tipos disponisbles son 'h2' y 'MySQL'
+  # Available types are 'h2' and 'MySQL'.
   type: h2
 
-  # Solo completar si el tipo elegido es MySQL
+  # Only complete if the chosen type is MySQL.
   username: root
   password: 12345
   ip: localhost

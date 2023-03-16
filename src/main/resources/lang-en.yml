@@ -1,27 +1,27 @@
-reload-config: '%prefix%&aConfiguración recargada!'
+reload-config: '%prefix%&aConfiguration reloaded!'
 
-not-op: '%prefix%&cSe detectaron irregularidades en tu cuenta. Contacta a un administrador.'
-player-banned: '%prefix%&bEl jugador %player% fue baneado ya que tenía op o permisos de op y no estaba en la lista de ops permitidos.'
-player-kicked: '%prefix%&bEl jugador %player% fue kickeado ya que tenía op o permisos de op y no estaba en la lista de ops permitidos.'
-player-deop: '%prefix%&bAl jugador %player% se le quitó el op o los permisos de op ya que no estaba en la lista de ops permitidos.'
-no-permission-for-op-list: '%prefix%&cEl jugador %player% no está en la lista de permitidos para tener op o permisos de op. No se realizó el comando'
-no-permission-for-op-permission: '%prefix%&cNo tienes el permiso %perm%. No se realizó el comando.'
-no-permission: '%prefix%&cNo tienes permisos para realizar este comando!'
-user-not-found: '%prefix%&cNo se pudo encotrar a ese jugador, o el mismo no tiene un QR asignado.'
-qr-code-changed: '%prefix%&aEl codigo QR de %player% fue cambiado!'
+not-op: '%prefix%&cIrregularities were detected in your account. Contact an administrator.'
+player-banned: '%prefix%&bThe player %player% was banned as he had op or op permissions and was not in the list of allowed ops.'
+player-kicked: '%prefix%&bThe player %player% was kicked as he had op or op permissions and was not on the allowed ops list.'
+player-deop: '%prefix%&bThe player %player% had his op or op permissions removed as he was not on the allowed ops list.'
+no-permission-for-op-list: '%prefix%&cThe player %player% is not on the allowed list to have op or op permissions. Command was not performed'
+no-permission-for-op-permission: '%prefix%&cYou do not have the %perm% permission. The command was not performed.'
+no-permission: '%prefix%&cYou do not have permission to perform this command!'
+user-not-found: '%prefix%&cThis player could not be found, or the player does not have a QR assigned.'
+qr-code-changed: '%prefix%&aThe QR code of %player% was changed!'
 
 ###Authentication###
-authentication-needed: '%prefix%&cDebes autenticarte con 2fa debido a que tu ip cambió. Por favor, ingresa el codigo que aparece en la aplicación que uses.'
-incorrect-code: '%prefix%&cEl código es incorrecto. Recuerda que es de 6 dígitos.'
-success: '%prefix%&aBienvenido! Ya se guardaron los cambios de tu IP'
-success-log: '%prefix%&aEl jugador %player% ingresó con 2fa.'
-auth-code: '%prefix%&bEn caso de que no te ande el QR, puedes ingresar el siguiente codigo manualmente: &e%secret%'
+authentication-needed: '%prefix%&cYou need to authenticate with 2fa because your ip has changed. Please enter the code that appears in the application you are using.'
+incorrect-code: '%prefix%&cThe code is incorrect. Remember it is 6 digits.'
+success: '%prefix%&aWelcome! Your IP changes have been saved'.
+success-log: '%prefix%&aThe player %player% logged in with 2fa.'
+auth-code: '%prefix%&bIn case the QR does not work, you can enter the following code manually: &e%secret%'
 
 ###HELP COMMAND###
 help: |
   &d------ &a&l[&6&lOpWatch&a&l] &d------
-  &bUsa &d/opwatch reload &bpara recargar el plugin.
-  &bUsa &d/opwatch reassign <player> para darle otro código QR al jugador en caso que lo haya perdido.
-  &bRecuerda que puedes usar colores hex en los mensajes!
-  &bHecho por: %author%
-  &d------ &a&l[&6&lAwesome-Points&a&l] &d------
+  &bUse &d/opwatch reload &bto reload the plugin.
+  &bUse &d/opwatch reassign <player> to give another QR code to the player in case he lost it.
+  &bRemember that you can use hex colors in messages!
+  &bDone by: %author%
+  &d------ &a&l[&6&OpWatch&a&l] &d------
