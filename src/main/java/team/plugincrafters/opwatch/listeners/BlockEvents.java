@@ -88,16 +88,6 @@ public class BlockEvents implements Listener {
         sendMessage(player);
     }
 
-    //TODO Fix it
-    //@EventHandler(priority = EventPriority.HIGHEST)
-    public void onCommandSend(PlayerCommandSendEvent event){
-        Player player = event.getPlayer();
-        if (playerCanInteract(player)) return;
-
-        event.getCommands().clear();
-        sendMessage(player);
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
