@@ -8,14 +8,14 @@ no-permission-for-op-list: '%prefix%&cEl jugador %player% no está en la lista d
 no-permission-for-op-permission: '%prefix%&cNo tienes el permiso %perm%. No se realizó el comando.'
 no-permission: '%prefix%&cNo tienes permisos para realizar este comando!'
 user-not-found: '%prefix%&cNo se pudo encotrar a ese jugador, o el mismo no tiene un QR asignado.'
-qr-code-changed: '%prefix%&aEl codigo QR de %player% fue cambiado!'
 
 ###Authentication###
-authentication-needed: '%prefix%&cDebes autenticarte con 2fa debido a que tu ip cambió. Por favor, ingresa el codigo que aparece en la aplicación que uses.'
+authentication-needed: '%prefix%&cDebes autenticarte con 2fa debido a que es tu primera vez con op o tu ip cambió. Por favor, ingresa el codigo que aparece en la aplicación que uses.'
 incorrect-code: '%prefix%&cEl código es incorrecto. Recuerda que es de 6 dígitos.'
 success: '%prefix%&aBienvenido! Ya se guardaron los cambios de tu IP'
 success-log: '%prefix%&aEl jugador %player% ingresó con 2fa.'
 auth-code: '%prefix%&bEn caso de que no te ande el QR, puedes ingresar el siguiente codigo manualmente: &e%secret%'
+qr-code-changed: '%prefix%&aEl codigo QR de %player% fue cambiado!'
 
 ###HELP COMMAND###
 help: |

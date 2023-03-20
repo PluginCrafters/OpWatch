@@ -41,18 +41,12 @@ public class CommandListener implements Listener {
         if (luckPerms == null || !fileManager.get("config").getBoolean("punishment.check-luckperms")) return;
 
         EventBus eventBus = luckPerms.getEventBus();
-        eventBus.subscribe(plugin, NodeAddEvent.class, this::onLuckpermsCommand);
+        eventBus.subscribe(plugin, NodeAddEvent.class, this::onLuckPermsCommand);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        Player player = event.getPlayer();
-        if (fileManager.get("config").getBoolean("auth.enabled") && !twoAuthFactorManager.playerIsAuthenticated(player)){
-            event.setCancelled(true);
-            return;
-        }
-
-        if (senderHasIrregularities(player, event.getMessage())) event.setCancelled(true);
+        if (senderHasIrregularities(event.getPlayer(), event.getMessage())) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -61,7 +55,7 @@ public class CommandListener implements Listener {
     }
 
 
-    private void onLuckpermsCommand(NodeAddEvent event){
+    private void onLuckPermsCommand(NodeAddEvent event){
         if (!event.isUser() || !(event.getNode() instanceof PermissionNode)) return;
 
         PermissionNode node = (PermissionNode) event.getNode();
@@ -82,35 +76,52 @@ public class CommandListener implements Listener {
     }
 
     private boolean senderHasIrregularities(CommandSender sender, String command) {
-        List<String> opCommands = fileManager.get("config").getStringList("punishment.op-commands");
-        if (opCommands == null) return false;
+        String opCommand = this.matchCommand(command);
+        if (opCommand == null) return false;
 
-        for (String opCommand : opCommands) {
-            if (!opCommand.contains("<player>")
-                    || !command.replace("/", "")
-                    .matches(opCommand.split(" :: ")[0].replace("<player>", "\\S+").replace("/", ""))) continue;
+        String perm = opCommand.split(" :: ").length == 2 ? opCommand.split(" :: ")[1] : "";
 
-            String perm = "";
-            if (opCommand.split(" :: ").length == 2) perm = opCommand.split(" :: ")[1];
-            FileConfiguration langFile = fileManager.get("language");
-
-            if (!sender.hasPermission(perm.replaceAll(" ", ""))){
-                sender.sendMessage(Utils.format(fileManager.get("config"),
-                        langFile.getString("no-permission-for-op-permission")).replace("%perm%", perm));
-                return true;
-            }
-
-            String[] splitCommand = command.split(" ");
-            int playerPos = opCommand.indexOf("<player>");
-            String playerName = splitCommand[opCommand.substring(0, playerPos).split(" ").length];
-
-            if (isPlayerOnList(playerName)) return false;
-
+        FileConfiguration langFile = fileManager.get("language");
+        if (!sender.hasPermission(perm.replaceAll(" ", ""))){
             sender.sendMessage(Utils.format(fileManager.get("config"),
-                    langFile.getString("no-permission-for-op-list").replace("%player%", playerName)));
+                    langFile.getString("no-permission-for-op-permission")).replace("%perm%", perm));
             return true;
         }
-        return false;
+
+        String playerName = this.getPlayerName(command, opCommand);
+        if (playerName == null) return false;
+
+        if (isPlayerOnList(playerName)){
+            if (fileManager.get("config").getBoolean("auth.enabled")){
+                Player player = Bukkit.getPlayerExact(playerName);
+                if (player != null) twoAuthFactorManager.joinPlayer(player);
+            }
+
+            return false;
+        }
+
+        sender.sendMessage(Utils.format(fileManager.get("config"),
+                langFile.getString("no-permission-for-op-list").replace("%player%", playerName)));
+        return true;
+    }
+
+    private String getPlayerName(String command, String opCommand){
+        String[] splitCommand = command.split(" ");
+        int playerPos = opCommand.indexOf("<player>");
+
+        return splitCommand[opCommand.substring(0, playerPos).split(" ").length];
+    }
+
+    private String matchCommand(String command){
+        List<String> opCommands = fileManager.get("config").getStringList("punishment.op-commands");
+        if (opCommands == null) return null;
+
+        return opCommands.stream().filter(opCommand -> opCommand.contains("<player>")
+                        && command.replace("/", "")
+                        .matches(opCommand.split(" :: ")[0]
+                                .replace("<player>", "\\S+")
+                                .replace("/", "")))
+                .findFirst().orElse(null);
     }
 
     private boolean isPlayerOnList(String playerName){

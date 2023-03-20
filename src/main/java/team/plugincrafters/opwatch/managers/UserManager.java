@@ -1,15 +1,16 @@
 package team.plugincrafters.opwatch.managers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import team.plugincrafters.opwatch.storage.Callback;
 import team.plugincrafters.opwatch.storage.repositories.ObjectRepository;
 import team.plugincrafters.opwatch.users.User;
+import team.plugincrafters.opwatch.users.UserState;
 
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserManager {
 
@@ -21,7 +22,20 @@ public class UserManager {
     private final Set<User> users = new HashSet<>();
 
     public void saveAll(){
-       userRepository.saveAll(users);
+        Map<Boolean, List<User>> partitionedUsers = users.stream()
+                .collect(Collectors.partitioningBy(user -> user.getUserState().equals(UserState.WAITING_REGISTRATION)));
+
+        Set<User> unregistered = new HashSet<>(partitionedUsers.get(true));
+        unregistered.forEach(user -> {
+            Player player = Bukkit.getPlayerExact(user.getName());
+            if (player == null) return;
+
+            player.getInventory().setHeldItemSlot(4);
+            player.setItemInHand(user.getItem());
+            user.setItem(null);
+        });
+
+        userRepository.saveAll(new HashSet<>(partitionedUsers.get(false)));
     }
 
     public void saveUser(User user){
@@ -52,8 +66,12 @@ public class UserManager {
     }
 
     public void removeUser(User user){
-        users.remove(user);
+        unloadUser(user);
         userRepository.delete(user.getUuid().toString());
+    }
+
+    public void unloadUser(User user){
+        this.users.remove(user);
     }
 
     public void start(){

@@ -8,13 +8,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import team.plugincrafters.opwatch.OpWatchPlugin;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.PunishmentManager;
 import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
 import team.plugincrafters.opwatch.managers.UserManager;
 import team.plugincrafters.opwatch.users.User;
 import team.plugincrafters.opwatch.users.UserState;
+import team.plugincrafters.opwatch.utils.AuthMeLoader;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 public class PlayerListener implements Listener {
 
     @Inject
-    private JavaPlugin plugin;
+    private OpWatchPlugin plugin;
     @Inject
     private FileManager fileManager;
     @Inject
@@ -53,6 +54,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
+        AuthMeLoader authMeLoader = plugin.getAuthMe();
+        if (authMeLoader != null && authMeLoader.isAuthMeWaitingPlayer(player)) return;
+
         if (!punishmentManager.isPowerful(player)) return;
 
         if (!fileManager.get("config").getBoolean("auth.enabled")) return;
@@ -61,17 +65,17 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event){
+        Player player = event.getPlayer();
+        User user = userManager.getUserByUUID(player.getUniqueId());
+        if (user == null) return;
         if (twoAuthFactorManager.playerIsAuthenticated(event.getPlayer())){
-            userManager.getUserByUUID(event.getPlayer().getUniqueId()).setUserState(UserState.WAITING_CONFIRMATION);
+            user.setUserState(UserState.WAITING_CONFIRMATION);
             return;
         }
 
-        Player player = event.getPlayer();
-        User user = userManager.getUserByUUID(player.getUniqueId());
         player.getInventory().setHeldItemSlot(4);
         player.setItemInHand(user.getItem());
         user.setItem(null);
-        userManager.removeUser(user);
     }
 
     private boolean isPlayerOnList(String playerName){

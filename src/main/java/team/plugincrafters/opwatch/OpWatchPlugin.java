@@ -7,6 +7,8 @@ import com.warrenstrange.googleauth.GoogleAuthenticator;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import team.plugincrafters.opwatch.commands.MainCommand;
@@ -15,9 +17,11 @@ import team.plugincrafters.opwatch.listeners.CommandListener;
 import team.plugincrafters.opwatch.listeners.PlayerListener;
 import team.plugincrafters.opwatch.managers.FileManager;
 import team.plugincrafters.opwatch.managers.PunishmentManager;
+import team.plugincrafters.opwatch.managers.TwoAuthFactorManager;
 import team.plugincrafters.opwatch.managers.UserManager;
 import team.plugincrafters.opwatch.modules.CoreModule;
 import team.plugincrafters.opwatch.storage.connections.DataConnection;
+import team.plugincrafters.opwatch.utils.AuthMeLoader;
 import team.unnamed.inject.Injector;
 
 import javax.inject.Inject;
@@ -41,9 +45,12 @@ public class OpWatchPlugin extends JavaPlugin {
     private MainCommand mainCommand;
     @Inject
     private PunishmentManager punishmentManager;
+    @Inject
+    private TwoAuthFactorManager twoAuthFactorManager;
 
     private LuckPerms luckPerms;
     private GoogleAuthenticator gAuth;
+    private AuthMeLoader authMe;
 
     @Override
     public void onEnable() {
@@ -54,11 +61,17 @@ public class OpWatchPlugin extends JavaPlugin {
             e.printStackTrace();
         }
 
-        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-        if (provider != null) {
-            luckPerms = provider.getProvider();
+        RegisteredServiceProvider<LuckPerms> lpProvider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        if (lpProvider != null) {
+            luckPerms = lpProvider.getProvider();
         }
+
         start();
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        Plugin authMePlugin = pluginManager.getPlugin("AuthMe");
+        if (authMePlugin != null && authMePlugin.isEnabled()){
+            authMe = new AuthMeLoader(this, punishmentManager, fileManager, twoAuthFactorManager);
+        }
     }
 
 
@@ -87,7 +100,7 @@ public class OpWatchPlugin extends JavaPlugin {
                 .setNotifyOpsOnJoin(true)
                 .setNotifyByPermissionOnJoin("opwatch.updatechecker")
                 .setUserAgent(new UserAgentBuilder().addPluginNameAndVersion())
-                .checkEveryXHours(3)
+                .checkEveryXHours(24)
                 .checkNow();
     }
 
@@ -105,6 +118,10 @@ public class OpWatchPlugin extends JavaPlugin {
 
     public LuckPerms getLuckperms(){
         return luckPerms;
+    }
+
+    public AuthMeLoader getAuthMe() {
+        return authMe;
     }
 
     public GoogleAuthenticator getgAuth() {

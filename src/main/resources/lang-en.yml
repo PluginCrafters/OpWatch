@@ -8,14 +8,14 @@ no-permission-for-op-list: '%prefix%&cThe player %player% is not on the allowed 
 no-permission-for-op-permission: '%prefix%&cYou do not have the %perm% permission. The command was not performed.'
 no-permission: '%prefix%&cYou do not have permission to perform this command!'
 user-not-found: '%prefix%&cThis player could not be found, or the player does not have a QR assigned.'
-qr-code-changed: '%prefix%&aThe QR code of %player% was changed!'
 
 ###Authentication###
-authentication-needed: '%prefix%&cYou need to authenticate with 2fa because your ip has changed. Please enter the code that appears in the application you are using.'
+authentication-needed: '%prefix%&cYou need to authenticate with 2fa because it''s your first time with op or your ip has changed. Please enter the code that appears in the application you are using.'
 incorrect-code: '%prefix%&cThe code is incorrect. Remember it is 6 digits.'
 success: '%prefix%&aWelcome! Your IP changes have been saved.'
 success-log: '%prefix%&aThe player %player% logged in with 2fa.'
 auth-code: '%prefix%&bIn case the QR does not work, you can enter the following code manually: &e%secret%'
+qr-code-changed: '%prefix%&aThe QR code of %player% was changed!'
 
 ###HELP COMMAND###
 help: |
