@@ -92,7 +92,7 @@ public class OpWatchPlugin extends JavaPlugin {
 
     private void checkUpdates(){
         if (!fileManager.get("config").getBoolean("update-checker")) return;
-        final String id = "93347";
+        final String id = "108739";
         new UpdateChecker(this, UpdateCheckSource.SPIGOT, id)
                 .setDownloadLink(id)
                 .setDonationLink("https://paypal.me/RosenM00?country.x=AR&locale.x=es_XC")
