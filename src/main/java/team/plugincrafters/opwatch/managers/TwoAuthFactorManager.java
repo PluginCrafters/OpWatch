@@ -47,6 +47,10 @@ public class TwoAuthFactorManager {
         if (user.getIp().equals(playerIp) || playerIsAuthenticated(player)){
             user.setUserState(UserState.LOGGED_IN);
             return;
+        } else if (user.getUserState().equals(UserState.WAITING_CONFIRMATION)){
+            player.getInventory().setHeldItemSlot(4);
+            ItemStack item = Utils.getVersion() >= 13 ? player.getInventory().getItemInMainHand() : player.getItemInHand();
+            user.setItem(item);
         }
 
         this.startConv(player);

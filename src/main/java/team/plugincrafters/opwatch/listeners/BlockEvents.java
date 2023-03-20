@@ -20,7 +20,6 @@ import team.plugincrafters.opwatch.utils.AuthMeLoader;
 import team.plugincrafters.opwatch.utils.Utils;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class BlockEvents implements Listener {
@@ -58,6 +57,7 @@ public class BlockEvents implements Listener {
     }
 
     private boolean playerCanInteract(Player player){
+        if (!enabled) return true;
         AuthMeLoader authMeLoader = plugin.getAuthMe();
         boolean isAuthWaiting = authMeLoader != null && authMeLoader.isAuthMeWaitingPlayer(player);
 
@@ -66,8 +66,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
@@ -82,26 +80,26 @@ public class BlockEvents implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+    public void onCommand(PlayerCommandPreprocessEvent event) {
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
         event.setCancelled(true);
+        sendMessage(player);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    //TODO Fix it
+    //@EventHandler(priority = EventPriority.HIGHEST)
     public void onCommandSend(PlayerCommandSendEvent event){
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
-        Collection<String> commands = event.getCommands();
-        commands.clear();
+        event.getCommands().clear();
+        sendMessage(player);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
@@ -111,8 +109,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
@@ -122,8 +118,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(AsyncPlayerChatEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
@@ -133,8 +127,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemDrop(PlayerDropItemEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
@@ -144,8 +136,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemPickup(PlayerPickupItemEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
@@ -154,8 +144,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
-        if (!enabled) return;
-
         if (!(event.getEntity() instanceof Player)) return;
 
         Player player = (Player) event.getEntity();
@@ -166,8 +154,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (!enabled) return;
-
         if (!(event.getDamager() instanceof Player)) return;
 
         Player player = (Player) event.getDamager();
@@ -178,8 +164,6 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!enabled) return;
-
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
@@ -192,23 +176,10 @@ public class BlockEvents implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSlotChange(PlayerItemHeldEvent event) {
-        if (!enabled) return;
-
         Player player = event.getPlayer();
         if (playerCanInteract(player)) return;
 
         player.getInventory().setHeldItemSlot(4);
-        event.setCancelled(true);
-        sendMessage(player);
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCommand(PlayerCommandPreprocessEvent event) {
-        if (!enabled) return;
-
-        Player player = event.getPlayer();
-        if (playerCanInteract(player)) return;
-
         event.setCancelled(true);
         sendMessage(player);
     }

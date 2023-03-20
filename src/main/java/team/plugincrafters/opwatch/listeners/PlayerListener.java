@@ -68,10 +68,14 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         User user = userManager.getUserByUUID(player.getUniqueId());
         if (user == null) return;
+
         if (twoAuthFactorManager.playerIsAuthenticated(event.getPlayer())){
             user.setUserState(UserState.WAITING_CONFIRMATION);
             return;
         }
+
+        AuthMeLoader authMeLoader = plugin.getAuthMe();
+        if (authMeLoader != null && authMeLoader.isAuthMeWaitingPlayer(player)) return;
 
         player.getInventory().setHeldItemSlot(4);
         player.setItemInHand(user.getItem());
