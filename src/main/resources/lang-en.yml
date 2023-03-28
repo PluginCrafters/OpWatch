@@ -24,4 +24,4 @@ help: |
   &bUse &d/opwatch reassign <player> to give another QR code to the player in case he lost it.
   &bRemember that you can use hex colors in messages!
   &bDone by: %author%
-  &d------ &a&l[&6&OpWatch&a&l] &d------
+  &d------ &a&l[&6&lOpWatch&a&l] &d------

@@ -35,6 +35,6 @@ public abstract class Subcommand {
     }
 
     public boolean argsLengthMatches(int args) {
-        return this.argsLength <= args;
+        return this.argsLength == args;
     }
 }

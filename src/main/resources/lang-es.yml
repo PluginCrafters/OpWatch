@@ -24,4 +24,4 @@ help: |
   &bUsa &d/opwatch reassign <player> para darle otro código QR al jugador en caso que lo haya perdido.
   &bRecuerda que puedes usar colores hex en los mensajes!
   &bHecho por: %author%
-  &d------ &a&l[&6&lAwesome-Points&a&l] &d------
+  &d------ &a&l[&6&lOpWatch&a&l] &d------
