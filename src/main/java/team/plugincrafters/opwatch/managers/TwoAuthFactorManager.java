@@ -37,7 +37,6 @@ public class TwoAuthFactorManager {
         }
     }
 
-
     private void checkConnection(User user, Player player){
         if (user == null || user.getUserState().equals(UserState.WAITING_REGISTRATION)){
             user = this.sendQR(player, user);
