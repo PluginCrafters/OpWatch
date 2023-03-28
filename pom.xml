@@ -36,7 +36,7 @@
                             <shadedPattern>team.plugincrafters.opwatch.bstats</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>me.yushust.inject</pattern>
+                            <pattern>team.unnamed.inject</pattern>
                             <shadedPattern>team.plugincrafters.opwatch.inject</shadedPattern>
                         </relocation>
                         <relocation>
